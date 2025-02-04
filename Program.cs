@@ -1,52 +1,60 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using System;
 
-int key = 3;
-
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/encrypt", (string input) => Encrypt(input, key));
-
-app.MapGet("/decrypt", (string input) => Decrypt(input, key));
-
-app.Run();
-
-string Encrypt(string input, int key)
+class Program
 {
-    string encryptText = "";
-
-    foreach (char c in input)
+    public static void Main(string[] args)
     {
-        if (char.IsLetter(c))
-        {
-            char lowerC = char.ToLower(c);
-            char keyed = (char)(((lowerC + key - 'a') % 26) + 'a');
-            encryptText += keyed;
-        }
-        else
-        {
-            encryptText += c;
-        }
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
+        
+        int key = 3;
+
+        app.MapGet("/", () => "Hello there!");
+
+        app.MapGet("/encrypt", (string input) => Encrypt(input, key));
+
+        app.MapGet("/decrypt", (string input) => Decrypt(input, key));
+
+        app.Run();
     }
-    return encryptText;
-}
 
-string Decrypt(string input, int key)
-{
-    string decryptText = "";
-
-    foreach (char c in input)
+    public static string Encrypt(string input, int key)
     {
-        if (char.IsLetter(c))
+        string encryptText = "";
+
+        foreach (char c in input)
         {
-            char lowerC = char.ToLower(c);
-            char keyed = (char)(((lowerC - key - 'a' + 26) % 26) + 'a');
-            decryptText += keyed;
+            if (char.IsLetter(c))
+            {
+                char lowerC = char.ToLower(c);
+                char keyed = (char)(((lowerC + key - 'a') % 26) + 'a');
+                encryptText += keyed;
+            }
+            else
+            {
+                encryptText += c;
+            }
         }
-        else
-        {
-            decryptText += c;
-        }
+        return encryptText;
     }
-    return decryptText;
+
+    public static string Decrypt(string input, int key)
+    {
+        string decryptText = "";
+
+        foreach (char c in input)
+        {
+            if (char.IsLetter(c))
+            {
+                char lowerC = char.ToLower(c);
+                char keyed = (char)(((lowerC - key - 'a' + 26) % 26) + 'a');
+                decryptText += keyed;
+            }
+            else
+            {
+                decryptText += c;
+            }
+        }
+        return decryptText;
+    }
 }
